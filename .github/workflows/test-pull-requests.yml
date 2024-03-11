@@ -1,0 +1,5 @@
+name: Test Pull Requests
+on: pull_request
+jobs:
+  build-and-test:
+    uses: ./.github/workflow/build-and-test.yml # relative path to the workflow we're calling
