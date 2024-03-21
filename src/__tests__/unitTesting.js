@@ -24,17 +24,17 @@ const fs = require("fs")  //needed for initDomFromFiles()
 const domTesting = require('@testing-library/dom')
 require('@testing-library/jest-dom') //don't need to store it b/c only augmenting
 // const userEvent = require("@testing-library/user-event").default
-function initDomFromFiles(htmlPath, jsPath) {    //may have multiple .js documents? //do they need to be isolated?
-    const html = fs.readFileSync(htmlPath, 'utf8')
-    //load html, but not always script file(s)
-    document.open()
-    document.write(html)
-    document.close()
-    //when seperate script file(s), use this to load test script without caching vars
-    jest.isolateModules(function() {
-        require(jsPath)
-    })
-}
+// function initDomFromFiles(htmlPath, jsPath) {    //may have multiple .js documents? //do they need to be isolated?
+//     const html = fs.readFileSync(htmlPath, 'utf8')
+//     //load html, but not always script file(s)
+//     document.open()
+//     document.write(html)
+//     document.close()
+//     //when seperate script file(s), use this to load test script without caching vars
+//     jest.isolateModules(function() {
+//         require(jsPath)
+//     })
+// }
 
 //dirname ensures grabbing test's directory("./")
 //initDomFromFiles(`${__dirname}/../registerUser.html`, `${__dirname}/../registerUser.js`)
@@ -252,6 +252,59 @@ describe('chartStorage.js Unit Tests', () => {
         expect(loadSavedChart(1)).toMatchObject(chartList[1])  //need to make that an empty array?
     })
     //could add border cases?
+
+    //updateCurrentChartData
+        //only that it saves?
+        //could do cases that are missing data, but idk that's necessary?
+    test('updateCurrentChartData saves the given chart in local storage', () => {
+        //Assert
+        window.localStorage.clear()
+        const currChart = {
+            type: "line",
+            data: [
+                {x: 1, y: 2},
+                {x: 5, y: 9},
+                {x: 6, y: 10},
+                {x: 7, y: 11}
+            ],
+            xLabel: "Time",
+            yLabel: "Temperature",
+            title: "Summer Temperatures, 2023",
+            color: "red"
+        }
+        
+        //Act
+        updateCurrentChartData(currChart)
+        window.localStorage.setItem("currentChartData", JSON.stringify(currChart))  //need stringify for obj rather than list?
+
+        //Assert
+        expect(JSON.parse(window.localStorage.getItem("currentChartData"))).toMatchObject(currChart)  //need to make that an empty array?
+    })
+    
+    //loadCurrentChartData
+        //only that it loads?
+        //could do cases that are missing data, but idk that's necessary?
+    test('loadCurrentChartData loads the expected chart from local storage', () => {
+        //Assert
+        window.localStorage.clear()
+        const currChart = {
+            type: "line",
+            data: [
+                {x: 1, y: 2},
+                {x: 5, y: 9},
+                {x: 6, y: 10},
+                {x: 7, y: 11}
+            ],
+            xLabel: "Time",
+            yLabel: "Temperature",
+            title: "Summer Temperatures, 2023",
+            color: "red"
+        }
+        window.localStorage.setItem("currentChartData", JSON.stringify(currChart))  //need stringify for obj rather than list?
+
+        //Assert
+        expect(loadCurrentChartData()).toMatchObject(currChart)  //need to make that an empty array?
+    })
 })
 
 // describe('generateChartImg.js Unit Tests', () => {
