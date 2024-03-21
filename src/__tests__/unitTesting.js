@@ -20,21 +20,21 @@ const { saveChart, loadAllSavedCharts, loadSavedChart, updateCurrentChartData,
 const generateChartImg = require('../lib/generateChartImg.js')
 const sortPoints = require('../lib/sortPoints.js')  //correct formatting for single function
 //add jsdom and stuff???
-// const fs = require("fs")  //needed for initDomFromFiles()
-// const domTesting = require('@testing-library/dom')
-// require('@testing-library/jest-dom') //don't need to store it b/c only augmenting
-// // const userEvent = require("@testing-library/user-event").default
-// function initDomFromFiles(htmlPath, jsPath) {    //may have multiple .js documents? //do they need to be isolated?
-//     const html = fs.readFileSync(htmlPath, 'utf8')
-//     //load html, but not always script file(s)
-//     document.open()
-//     document.write(html)
-//     document.close()
-//     //when seperate script file(s), use this to load test script without caching vars
-//     jest.isolateModules(function() {
-//         require(jsPath)
-//     })
-// }
+const fs = require("fs")  //needed for initDomFromFiles()
+const domTesting = require('@testing-library/dom')
+require('@testing-library/jest-dom') //don't need to store it b/c only augmenting
+// const userEvent = require("@testing-library/user-event").default
+function initDomFromFiles(htmlPath, jsPath) {    //may have multiple .js documents? //do they need to be isolated?
+    const html = fs.readFileSync(htmlPath, 'utf8')
+    //load html, but not always script file(s)
+    document.open()
+    document.write(html)
+    document.close()
+    //when seperate script file(s), use this to load test script without caching vars
+    jest.isolateModules(function() {
+        require(jsPath)
+    })
+}
 
 //dirname ensures grabbing test's directory("./")
 //initDomFromFiles(`${__dirname}/../registerUser.html`, `${__dirname}/../registerUser.js`)
@@ -43,6 +43,7 @@ describe('chartStorage.js Unit Tests', () => {
     //saveChart (doesn't care about incomplete charts)
     test('saveChart function saves chart with 3 datapoints, name, and color', () => {
         //Arrange
+        window.localStorage.clear()  //clear local storage
         const chartList = [
             {
                 type: "line",
@@ -81,6 +82,7 @@ describe('chartStorage.js Unit Tests', () => {
     })
     test('saveChart function replaces chart at index 0 with chart with 3 datapoints, name, and color', () => {
         //Arrange
+        window.localStorage.clear()
         const chartList = [
             {
                 type: "line",
@@ -107,7 +109,7 @@ describe('chartStorage.js Unit Tests', () => {
             yLabel: "Rainfall (cm)",
             title: "Summer Rainfall, 2023",
             color: "blue"
-        }
+        };
         window.localStorage.setItem("savedCharts", JSON.stringify(chartList))
         
         //Act
@@ -121,7 +123,59 @@ describe('chartStorage.js Unit Tests', () => {
 
     //loadAllSavedCharts
         //empty test
+    test('loadAllSavedCharts returns an empty array when no charts are saved', () => {
+        //Assert
+        window.localStorage.clear()
+        expect(loadAllSavedCharts()).toMatchObject([])  //need to make that an empty array?
+    })
         //3 charts test (should appear in same order as on input)
+    test('loadAllSavedCharts returns 3 charts test (in same order as on input)', () => {
+        //Arrange
+        window.localStorage.clear()
+        const chartList = [
+            {
+                type: "line",
+                data: [
+                    {x: 1, y: 2},
+                    {x: 5, y: 9},
+                    {x: 6, y: 10},
+                    {x: 7, y: 11}
+                ],
+                xLabel: "Time",
+                yLabel: "Temperature",
+                title: "Summer Temperatures, 2023",
+                color: "red"
+            },
+            {
+                type: "bar",
+                data: [
+                    {x: 2, y: 3},
+                    {x: 6, y: 10},
+                    {x: 7, y: 11}
+                ],
+                xLabel: "Month",
+                yLabel: "Rainfall (cm)",
+                title: "Summer Rainfall, 2023",
+                color: "blue"
+            },
+            {
+                type: "scatter",
+                data: [
+                    {x: 3, y: 4},
+                    {x: 7, y: 11},
+                    {x: 8, y: 12}
+                ],
+                xLabel: "longitude",
+                yLabel: "lattitude",
+                title: "Bear Sightings, Summer 2023",
+                color: "black"
+            }
+        ];
+        window.localStorage.setItem("savedCharts", JSON.stringify(chartList))
+
+        //Assert
+        expect(loadAllSavedCharts()).toMatchObject(chartList)  //need to make that an empty array?
+    })
 })
 
 // describe('generateChartImg.js Unit Tests', () => {
