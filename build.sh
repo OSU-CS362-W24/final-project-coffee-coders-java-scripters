@@ -6,4 +6,4 @@
 
 mkdir build/
 rm -rf build/*
-cp -r src/**/*.html src/**/*.css src/**/*.js
+cp -r src/**/*.html src/**/*.css src/**/*.js build/
