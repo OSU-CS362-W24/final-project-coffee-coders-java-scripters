@@ -1,0 +1,31 @@
+# run all tests on PR creation and push to main
+# use 2 spaces for indentation
+name: Build and Test
+on:
+  workflow_call:
+    inputs:
+      # if this bool is true, we upload the build to GitHub Pages
+      upload-pages-artifact: 
+        type: boolean
+        required: false
+jobs:
+  build-and-test: 
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3 # checkout repo so workflow can access it
+      - uses: actions/setup-node@v3 # make sure node is installed
+        with: 
+          node-version: 21
+      - run: npm ci # clean install of dependencies
+      - run: npm run build
+      - run: npm run test:integration_and_unit # calls upon jest, which runs both integration and unit tests
+      - run: npm run test:e2e
+      - uses: actions/upload-artifact@v3
+        with: 
+          name: e2e-videos
+          path: cypress/videos/ # save cypress videos for human viewing
+      - if: ${{inputs.upload-pages-artifact}}
+        uses: actions/upload-pages-artifact@v1
+        with: 
+          path: build/
+
