@@ -46,7 +46,7 @@ describe('chartStorage.js Unit Tests', () => {
         window.localStorage.setItem("savedCharts", JSON.stringify(chartList))
 
         //Act
-        saveChart(newChart, null)  //should be save to location 0, since no other charts exist
+        saveChart(newChart, null)  //should be save to location 1, since not given an index
         
         //Assert
         expect(JSON.parse(window.localStorage.getItem("savedCharts")).length).toBe(2)
@@ -85,7 +85,7 @@ describe('chartStorage.js Unit Tests', () => {
         window.localStorage.setItem("savedCharts", JSON.stringify(chartList))
         
         //Act
-        saveChart(newChart, 0)  //should be save to location 0, since no other charts exist
+        saveChart(newChart, 0)  //should be save to location 0, replacing the previous chart
         
         //Assert
         expect(JSON.parse(window.localStorage.getItem("savedCharts")).length).toBe(1)
@@ -96,7 +96,7 @@ describe('chartStorage.js Unit Tests', () => {
     test('loadAllSavedCharts returns an empty array when no charts are saved', () => {
         //Assert
         window.localStorage.clear()
-        expect(loadAllSavedCharts()).toMatchObject([])  //need to make that an empty array?
+        expect(loadAllSavedCharts()).toMatchObject([])
     })
     test('loadAllSavedCharts returns 3 charts test (in same order as on input)', () => {
         //Arrange
@@ -143,14 +143,14 @@ describe('chartStorage.js Unit Tests', () => {
         window.localStorage.setItem("savedCharts", JSON.stringify(chartList))
 
         //Assert
-        expect(loadAllSavedCharts()).toMatchObject(chartList)  //need to make that an empty array?
+        expect(loadAllSavedCharts()).toMatchObject(chartList)
     })
 
     //loadSavedChart
     test('loadSavedChart returns an empty chart when no charts are saved', () => {
         //Assert
         window.localStorage.clear()
-        expect(loadSavedChart(1)).toMatchObject({})  //need to make that an empty array?
+        expect(loadSavedChart(1)).toMatchObject({})
     })
     test('loadSavedChart returns an empty chart when chart\'s idx is beyond array range', () => {
         //Assert
@@ -173,7 +173,7 @@ describe('chartStorage.js Unit Tests', () => {
         window.localStorage.setItem("savedCharts", JSON.stringify(chartList))
 
         //Assert
-        expect(loadSavedChart(2)).toMatchObject({})  //need to make that an empty array?
+        expect(loadSavedChart(2)).toMatchObject({})
     })
     test('loadAllSavedCharts returns 3 charts test (in same order as on input)', () => {
         //Arrange
@@ -220,7 +220,7 @@ describe('chartStorage.js Unit Tests', () => {
         window.localStorage.setItem("savedCharts", JSON.stringify(chartList))
 
         //Assert
-        expect(loadSavedChart(1)).toMatchObject(chartList[1])  //need to make that an empty array?
+        expect(loadSavedChart(1)).toMatchObject(chartList[1])
     })
 
     //updateCurrentChartData
@@ -243,10 +243,10 @@ describe('chartStorage.js Unit Tests', () => {
         
         //Act
         updateCurrentChartData(currChart)
-        window.localStorage.setItem("currentChartData", JSON.stringify(currChart))  //need stringify for obj rather than list?
+        window.localStorage.setItem("currentChartData", JSON.stringify(currChart))
 
         //Assert
-        expect(JSON.parse(window.localStorage.getItem("currentChartData"))).toMatchObject(currChart)  //need to make that an empty array?
+        expect(JSON.parse(window.localStorage.getItem("currentChartData"))).toMatchObject(currChart)
     })
     
     //loadCurrentChartData
@@ -266,10 +266,10 @@ describe('chartStorage.js Unit Tests', () => {
             title: "Summer Temperatures, 2023",
             color: "red"
         }
-        window.localStorage.setItem("currentChartData", JSON.stringify(currChart))  //need stringify for obj rather than list?
+        window.localStorage.setItem("currentChartData", JSON.stringify(currChart))
 
         //Assert
-        expect(loadCurrentChartData()).toMatchObject(currChart)  //need to make that an empty array?
+        expect(loadCurrentChartData()).toMatchObject(currChart)
     })
 })
 
@@ -288,7 +288,6 @@ describe('generateChartImg.js Unit Tests', () => {
 
 //sortPoints.js dependency
 describe('sortPoints.js Unit Tests', () => {
-
     //sortPoints
     test('Sort points [(6, 10), (1,2), (7,11), (5,9)] to be [(1,2), (5,9), (6, 10), (7,11)]', () => {
         let givenPointsArray = [
