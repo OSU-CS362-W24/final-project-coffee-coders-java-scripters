@@ -1,6 +1,51 @@
-// example that will be replaced by actual e2e tests
-describe('template spec', function() {
-    it('passes', () => {
-        assert(true)
-    })
-  })
+it('Chart is generated', function () {
+    cy.visit('/')
+    cy.findAllByText("Line").click()
+    cy.findAllByLabelText("Chart title").type('Cat super powers')
+    cy.findAllByLabelText("X label").type('cats')
+    cy.findAllByLabelText("Y label").type('powers')
+    cy.findAllByLabelText("X").type('1')
+    cy.findAllByLabelText("Y").type('3')
+    cy.findAllByText("Generate chart").click()
+    cy.get('#chart-img').should('exist')
+})
+
+it('Data is saved between tabs', function () {
+    cy.visit('/')
+    cy.findAllByText("Line").click()
+    cy.findAllByLabelText("Chart title").type('Cat super powers')
+    cy.findAllByLabelText("X label").type('cats')
+    cy.findAllByLabelText("Y label").type('powers')
+    cy.findAllByLabelText("X").type('1')
+    cy.findAllByLabelText("Y").type('3')
+
+})
+
+it('Chart is saved to the gallary', function () {
+    cy.visit('/')
+    cy.findAllByText("Line").click()
+    cy.findAllByLabelText("Chart title").type('Cat super powers')
+    cy.findAllByLabelText("X label").type('cats')
+    cy.findAllByLabelText("Y label").type('powers')
+    cy.findAllByLabelText("X").type('1')
+    cy.findAllByLabelText("Y").type('3')
+    cy.findAllByText("Generate chart").click()
+    cy.findAllByText("Save chart").click()
+    cy.findAllByText("Gallery").click()
+    cy.get('#gallery').children().should('have.length', 1)
+})
+
+it('Chart is saved to the gallary', function () {
+    cy.visit('/')
+    cy.findAllByText("Line").click()
+    cy.findAllByLabelText("Chart title").type('Cat super powers')
+    cy.findAllByLabelText("X label").type('cats')
+    cy.findAllByLabelText("Y label").type('powers')
+    cy.findAllByLabelText("X").type('1')
+    cy.findAllByLabelText("Y").type('3')
+    cy.findAllByText("Generate chart").click()
+    cy.findAllByText("Save chart").click()
+    cy.findAllByText("Gallery").click()
+    cy.get('#gallery').children().click()
+})
+
