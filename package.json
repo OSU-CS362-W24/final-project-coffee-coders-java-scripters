@@ -4,6 +4,7 @@
   "description": "CS 362 Final Project",
   "scripts": {
     "start": "serve todos -p 3001",
+    "build": "./build.sh",
     "cy:open": "cypress open",
     "cy:run": "cypress run",
     "test:e2e": "start-test start http://localhost:3001 cy:run",
