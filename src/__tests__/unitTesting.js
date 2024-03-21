@@ -122,13 +122,11 @@ describe('chartStorage.js Unit Tests', () => {
     //one more test for idx > charts.length?
 
     //loadAllSavedCharts
-        //empty test
     test('loadAllSavedCharts returns an empty array when no charts are saved', () => {
         //Assert
         window.localStorage.clear()
         expect(loadAllSavedCharts()).toMatchObject([])  //need to make that an empty array?
     })
-        //3 charts test (should appear in same order as on input)
     test('loadAllSavedCharts returns 3 charts test (in same order as on input)', () => {
         //Arrange
         window.localStorage.clear()
@@ -176,6 +174,84 @@ describe('chartStorage.js Unit Tests', () => {
         //Assert
         expect(loadAllSavedCharts()).toMatchObject(chartList)  //need to make that an empty array?
     })
+
+    //loadSavedChart
+    test('loadSavedChart returns an empty chart when no charts are saved', () => {
+        //Assert
+        window.localStorage.clear()
+        expect(loadSavedChart(1)).toMatchObject({})  //need to make that an empty array?
+    })
+    test('loadSavedChart returns an empty chart when chart\'s idx is beyond array range', () => {
+        //Assert
+        window.localStorage.clear()
+        const chartList = [
+            {
+                type: "line",
+                data: [
+                    {x: 1, y: 2},
+                    {x: 5, y: 9},
+                    {x: 6, y: 10},
+                    {x: 7, y: 11}
+                ],
+                xLabel: "Time",
+                yLabel: "Temperature",
+                title: "Summer Temperatures, 2023",
+                color: "red"
+            }
+        ]
+        window.localStorage.setItem("savedCharts", JSON.stringify(chartList))
+
+        //Assert
+        expect(loadSavedChart(2)).toMatchObject({})  //need to make that an empty array?
+    })
+    test('loadAllSavedCharts returns 3 charts test (in same order as on input)', () => {
+        //Arrange
+        window.localStorage.clear()
+        const chartList = [
+            {
+                type: "line",
+                data: [
+                    {x: 1, y: 2},
+                    {x: 5, y: 9},
+                    {x: 6, y: 10},
+                    {x: 7, y: 11}
+                ],
+                xLabel: "Time",
+                yLabel: "Temperature",
+                title: "Summer Temperatures, 2023",
+                color: "red"
+            },
+            {
+                type: "bar",
+                data: [
+                    {x: 2, y: 3},
+                    {x: 6, y: 10},
+                    {x: 7, y: 11}
+                ],
+                xLabel: "Month",
+                yLabel: "Rainfall (cm)",
+                title: "Summer Rainfall, 2023",
+                color: "blue"
+            },
+            {
+                type: "scatter",
+                data: [
+                    {x: 3, y: 4},
+                    {x: 7, y: 11},
+                    {x: 8, y: 12}
+                ],
+                xLabel: "longitude",
+                yLabel: "lattitude",
+                title: "Bear Sightings, Summer 2023",
+                color: "black"
+            }
+        ];
+        window.localStorage.setItem("savedCharts", JSON.stringify(chartList))
+
+        //Assert
+        expect(loadSavedChart(1)).toMatchObject(chartList[1])  //need to make that an empty array?
+    })
+    //could add border cases?
 })
 
 // describe('generateChartImg.js Unit Tests', () => {
