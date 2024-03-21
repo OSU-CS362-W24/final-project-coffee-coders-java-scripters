@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "CS 362 Final Project",
   "scripts": {
-    "start": "serve src -p 8080",
-    "build": "./build.sh",
+    "start": "serve dist -p 8080",
+    "build": "webpack",
     "cy:open": "cypress open",
     "cy:run": "cypress run",
     "test:e2e": "start-test start http://localhost:8080 cy:run",
