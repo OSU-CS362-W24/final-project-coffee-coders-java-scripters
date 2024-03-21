@@ -39,24 +39,108 @@ const sortPoints = require('../lib/sortPoints.js')  //correct formatting for sin
 //dirname ensures grabbing test's directory("./")
 //initDomFromFiles(`${__dirname}/../registerUser.html`, `${__dirname}/../registerUser.js`)
 
-// describe('chartStorage.js Unit Tests', () => {
-//     //add chart storage tests here...
-//     test('saveChart function saves chart with 3 datapoints, name, and color', () => {
-//         //create
-//         //code here
-//         saveChart(1, null)  //should be save to location 0, since no other charts exist
-//         //code to check if it worked
-//     })
-//     test('saveChart function replaces chart at index 0 with chart with 3 datapoints, name, and color', () => {
-//         //create
-//         //code here
-//         saveChart(1, 0)
-//         //code to check if it worked
-//     })
-// })
+describe('chartStorage.js Unit Tests', () => {
+    //saveChart (doesn't care about incomplete charts)
+    test('saveChart function saves chart with 3 datapoints, name, and color', () => {
+        //Arrange
+        const chartList = [
+            {
+                type: "line",
+                data: [
+                    {x: 1, y: 2},
+                    {x: 5, y: 9},
+                    {x: 6, y: 10},
+                    {x: 7, y: 11}
+                ],
+                xLabel: "Time",
+                yLabel: "Temperature",
+                title: "Summer Temperatures, 2023",
+                color: "red"
+            }
+        ];
+        const newChart = {
+            type: "bar",
+            data: [
+                {x: 2, y: 3},
+                {x: 6, y: 10},
+                {x: 7, y: 11}
+            ],
+            xLabel: "Month",
+            yLabel: "Rainfall (cm)",
+            title: "Summer Rainfall, 2023",
+            color: "blue"
+        }
+        window.localStorage.setItem("savedCharts", JSON.stringify(chartList))
+
+        //Act
+        saveChart(newChart, null)  //should be save to location 0, since no other charts exist
+        
+        //Assert
+        expect(JSON.parse(window.localStorage.getItem("savedCharts")).length).toBe(2)
+        expect(JSON.parse(window.localStorage.getItem("savedCharts"))[1]).toMatchObject(newChart)
+    })
+    test('saveChart function replaces chart at index 0 with chart with 3 datapoints, name, and color', () => {
+        //Arrange
+        const chartList = [
+            {
+                type: "line",
+                data: [
+                    {x: 1, y: 2},
+                    {x: 5, y: 9},
+                    {x: 6, y: 10},
+                    {x: 7, y: 11}
+                ],
+                xLabel: "Time",
+                yLabel: "Temperature",
+                title: "Summer Temperatures, 2023",
+                color: "red"
+            }
+        ];
+        const newChart = {
+            type: "bar",
+            data: [
+                {x: 2, y: 3},
+                {x: 6, y: 10},
+                {x: 7, y: 11}
+            ],
+            xLabel: "Month",
+            yLabel: "Rainfall (cm)",
+            title: "Summer Rainfall, 2023",
+            color: "blue"
+        }
+        window.localStorage.setItem("savedCharts", JSON.stringify(chartList))
+        
+        //Act
+        saveChart(newChart, 0)  //should be save to location 0, since no other charts exist
+        
+        //Assert
+        expect(JSON.parse(window.localStorage.getItem("savedCharts")).length).toBe(1)
+        expect(JSON.parse(window.localStorage.getItem("savedCharts"))[0]).toMatchObject(newChart)
+    })
+    //one more test for idx > charts.length?
+
+    //loadAllSavedCharts
+        //empty test
+        //3 charts test (should appear in same order as on input)
+})
 
 // describe('generateChartImg.js Unit Tests', () => {
-//     //add generate chart image tests here...
+//      //add generate chart image tests here...
+//      //can't test url match previous tests (changes with each function call)
+//      //try matching image to previous image (pixel for pixel)?
+//      //or just test that it's a url?
+//      //failure returns null or undefined?
+//      test('generateChartImg function generates an image with valid input', () => {
+//         //set inputs
+//         let pointsArray = [
+//             {x: 1, y: 2},
+//             {x: 5, y: 9},
+//             {x: 6, y: 10},
+//             {x: 7, y: 11}
+//         ];
+//         //doesn't like the function call, issues with fetch not defined?
+//         expect(generateChartImg("line", pointsArray, "Time", "Temperature", "Summer Temperatures, 2023", "blue")).not.toBe(undefined)
+//      })
 // })
 
 //sortPoints.js dependency
