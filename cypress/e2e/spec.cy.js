@@ -18,9 +18,11 @@ it('Data is saved between tabs', function () {
     cy.findAllByLabelText("Y label").type('powers')
     cy.findAllByLabelText("X").type('6')
     cy.findAllByLabelText("Y").type('9')
+    cy.findAllByText("Generate chart").click()
+    cy.findAllByText("Scatter").click()
     cy.findAllByLabelText("X").first().invoke('val').should('equal', '6')
     cy.findAllByLabelText("Y").first().invoke('val').should('equal', '9')
-    cy.findAllByLabelText("X label").parent().parent().children().should('have.length', 5)
+    cy.findAllByLabelText("X label").parent().parent().children().should('have.length', 7)
 
 })
 
@@ -36,6 +38,8 @@ it('Chart is saved to the gallary', function () {
     cy.findAllByText("Save chart").click()
     cy.findAllByText("Gallery").click()
     cy.get('#gallery').children().should('have.length', 1)
+    cy.findAllByText("Cat super powers").should('exist')
+
 })
 
 it('Chart in gallery opens with correct values', function () {
