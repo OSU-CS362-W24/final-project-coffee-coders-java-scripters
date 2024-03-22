@@ -24,4 +24,4 @@ Running the app through the development server will not produce any build files.
 npm run build
 ```
 
-Running this command will generate a directory called `dist/` that will contain HTML and JS files comprising the built application.  These are the files you'll want to package for release and deploy in the CI/CD pipeline you build for the app.
+Running this command will generate a directory called `dist/` that will contain HTML and JS files comprising the built application.  These are the files you'll want to package for release and deploy in the CI/CD pipeline you build for the app. 
