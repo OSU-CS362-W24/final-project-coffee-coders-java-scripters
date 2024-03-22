@@ -1,6 +1,62 @@
-// example that will be replaced by actual e2e tests
-describe('template spec', function() {
-    it('passes', () => {
-        assert(true)
-    })
-  })
+it('Chart is generated', function () {
+    cy.visit('/')
+    cy.findAllByText("Line").click()
+    cy.findAllByLabelText("Chart title").type('Cat super powers')
+    cy.findAllByLabelText("X label").type('cats')
+    cy.findAllByLabelText("Y label").type('powers')
+    cy.findAllByLabelText("X").type('1')
+    cy.findAllByLabelText("Y").type('3')
+    cy.findAllByText("Generate chart").click()
+    cy.get('#chart-img').should('exist')
+})
+
+it('Data is saved between tabs', function () {
+    cy.visit('/')
+    cy.findAllByText("Line").click()
+    cy.findAllByLabelText("Chart title").type('Cat super powers')
+    cy.findAllByLabelText("X label").type('cats')
+    cy.findAllByLabelText("Y label").type('powers')
+    cy.findAllByLabelText("X").type('6')
+    cy.findAllByLabelText("Y").type('9')
+    cy.findAllByText("Generate chart").click()
+    cy.findAllByText("Scatter").click()
+    cy.findAllByLabelText("X").first().invoke('val').should('equal', '6')
+    cy.findAllByLabelText("Y").first().invoke('val').should('equal', '9')
+    cy.findAllByLabelText("X label").parent().parent().children().should('have.length', 7)
+
+})
+
+it('Chart is saved to the gallary', function () {
+    cy.visit('/')
+    cy.findAllByText("Line").click()
+    cy.findAllByLabelText("Chart title").type('Cat super powers')
+    cy.findAllByLabelText("X label").type('cats')
+    cy.findAllByLabelText("Y label").type('powers')
+    cy.findAllByLabelText("X").type('4')
+    cy.findAllByLabelText("Y").type('2')
+    cy.findAllByText("Generate chart").click()
+    cy.findAllByText("Save chart").click()
+    cy.findAllByText("Gallery").click()
+    cy.get('#gallery').children().should('have.length', 1)
+    cy.findAllByText("Cat super powers").should('exist')
+
+})
+
+it('Chart in gallery opens with correct values', function () {
+    cy.visit('/')
+    cy.findAllByText("Line").click()
+    cy.findAllByLabelText("Chart title").type('Cat super powers')
+    cy.findAllByLabelText("X label").type('cats')
+    cy.findAllByLabelText("Y label").type('powers')
+    cy.findAllByLabelText("X").type('12')
+    cy.findAllByLabelText("Y").type('21')
+    cy.findAllByText("Generate chart").click()
+    cy.findAllByText("Save chart").click()
+    cy.findAllByText("Gallery").click()
+    cy.get('#gallery').children().click()
+    cy.findAllByLabelText("X").first().invoke('val').should('equal', '12')
+    cy.findAllByLabelText("Y").first().invoke('val').should('equal', '21')
+    cy.findAllByLabelText("X label").parent().parent().children().should('have.length', 7)
+
+})
+
